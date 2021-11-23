@@ -1,0 +1,23 @@
+.ItemCount{
+    height: 150px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid fuchsia;
+    border-radius: 5px;
+}
+
+.counter{
+    width: 150px;
+    display: flex;
+    justify-content: space-between
+}
+
+.counter p{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 7px;
+}
