@@ -1,21 +1,24 @@
-import React from 'react';
-import { Container } from 'react-bootstrap';
-import './App.css'
+import './App.css';
 import NavBar from './component/NavBar/NavBar';
-import ItemListContainer from './component/ItemListContainer/ItemListContainer'
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './component/Router/Router';
+import { CartProvider } from './component/CartContext/CartContext';
 
+function App(){
 
-function App() {
+ 
   return (
-    <div>
-      <header>
-        <NavBar/>
-      </header>
-      <Container>
-        <ItemListContainer />
-      </Container>
-    </div>
+        <CartProvider>
+          <BrowserRouter>
+                <header>
+                  <badge />
+                    <NavBar />
+                    <Router />
+                  </header>
+              </BrowserRouter>
+        </CartProvider>
+
   );
-}
+};
 
 export default App;

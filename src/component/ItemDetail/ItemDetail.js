@@ -1,48 +1,74 @@
-import { Modal, Card, Badge } from "react-bootstrap";
-import ItemCount from '../ItemCount/ItemCount';
+import React,{ useContext, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import { CartContext } from '../CartContext/CartContext';
+import ItemCount from '../ItemCount/ItemCount'
+import './ItemDetail.css';
 
-const ItemDetail = (props) => {
-    const { name, stock, price, img, detail, id } = props.props;
+const ItemDetail = ({ id, name, img, detail, price, stock}) => {
 
 
-    const product = {
-        stock: stock,
-        initial:1,
-        onAdd:(stock, cantidad) =>{
-            alert(`Agregando ${cantidad} al carrito`);
-            return stock - cantidad;
+    const { addCart, isInCart } = useContext(CartContext);
 
-        },
-        precio: price,
+
+    const navigate = useNavigate();
+
+    const [counter, setCounter] = useState(0);
+    //const [ viewAdd, setViewAdd ] = useState(false);
+    
+    const handleOut = () => {
+        //Vuelve una navegacion anterior
+        navigate(-1)
+    }
+
+    const handleAdd = () => {
+        if(counter > 0){
+            addCart({
+                id,
+                name,
+                img,
+                price,
+                counter
+                });
+        };
     };
-
-    return(
+    return (
         <>
-        <Modal.Header closeButton>
-            <Modal.Title>{name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Card>
-                <Card.Img variant='top' src={img} width='80%'/>
-                <Card.Body>
-                    <Card.Text>
-                        <span style={{ textAlign: 'center' }}>
-                            <Badge bg='success'>SKU: {id}</Badge>
-                        </span>
-                        <br />
-                        <span>{detail}</span>
-                        <br />
-                        <span>
-                            <Badge bg='danger'>Precio: ${price}</Badge>
-                        </span>
-                    </Card.Text>
-                    <ItemCount props={product} />
-                </Card.Body>
-            </Card>
-        </Modal.Body>
+        <div className='ItemDetail' key={id}>
+            <div className='contentImg'>
+                    <button className='btn btn-secondary' style={{width:'40px', borderRadius:'15px'}} onClick={handleOut}>
+                    <div class="visible content">
+                        <i class="angle left icon"></i>
+                    </div>
+                </button>
+                <img src={img} alt={name}/>
+            </div>
+            <div className='item'>
+                <h1>{name}</h1>
+                <p>{detail}</p>
+                <p>USD ${price}</p>
+            {
+                !isInCart(id)
+                ?  <ItemCount
+                    stock={stock}
+                    counter={counter}
+                    setCounter={setCounter}
+                    onAdd={handleAdd}/>
+                : <>
+                    <Link to='/Cart' className='btn btn-secondary' style={{width:'200px', borderRadius:'5px', margin:'2px'}}>Ver Mi Carrito</Link>
+                    <button className='btn btn-secondary' 
+                            style={{width:'60px', borderRadius:'5px', margin:'2px'}} 
+                            onClick={handleOut}>
+                                Atras
+                                </button>
+                  </>
+
+
+            }
+            </div>
+        </div>
         </>
     );
-
 };
 
 export default ItemDetail;

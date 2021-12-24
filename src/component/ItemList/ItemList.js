@@ -1,19 +1,25 @@
+
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
-import Item from '../Item/Item'
+import { Container, Row } from 'react-bootstrap';
+import Carrusel from '../Carrusel/Carrusel'
+import  Item  from '../Item/Item';
 
 
-function ItemList({items}) {
+const ItemList = ({product = []}) => {
 
 
     return (
-        <>
-            {items.length ? (
-            items.map( (elem, idx) => <Item props={elem} key={idx}/>) 
-            ) : (
-                <Spinner animation='border' variant='primary' />
-        )}
-        </>
+        <Container className='text-center' >
+            <Carrusel/>
+            <h3 className='text-center' style={{fontSize:'30px',
+                                                margin:'20px'}}>Productos</h3>
+        <Row>
+            {product.map(prod => <Item prod={prod.id} {...prod}/>) }
+        </Row>
+
+
+        </Container>
     );
 };
- export default ItemList;
+
+export default ItemList;

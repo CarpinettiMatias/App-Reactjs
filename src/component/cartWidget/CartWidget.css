@@ -1,0 +1,16 @@
+.CartWidget{
+    font-size: 15px;
+   margin-left: 20px;
+   display: flex;
+
+}
+.hidden{
+    visibility: hidden;
+    pointer-events: none;
+    cursor: auto;
+}
+.number{
+    color: black;
+    margin-left: 30%;
+    margin-top: 50%;
+}

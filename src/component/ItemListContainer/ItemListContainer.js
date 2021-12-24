@@ -1,33 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore/lite';
+import React, { useState, useEffect} from 'react';
+import { useParams } from 'react-router';
+import { BD } from '../firebase/firebaseConfig'
 import ItemList from '../ItemList/ItemList';
-import { Row, Col } from "react-bootstrap";
 
-import Data from "../Data/Data.json"
 
-function ItemListContainer() {
-    const [ product, setProduct ] = useState(0);
+const ItemListContainer = () => {
+
+    const [ loading, setLoading ] = useState(false);
+    const [ product, setProduct ] = useState([]);
+
+     const {catId} = useParams()
 
 
     useEffect(() => {
-        const ackData = new Promise ((resolve, reject) => {
-            setTimeout(function () {
-                resolve(Data);
 
-            }, 2000);
-        });
+        setLoading(true);
 
-        ackData.then((response) => {
-            setProduct(response)
-        });
-    }, []);
+        const productRef = collection(BD, 'product');
+
+        const q = catId
+                        ? query(productRef, where('category' , '==' , catId))
+                        : productRef ;
+
+        getDocs(q)
+            .then((collection) => {
+              const items = collection.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data()
+              }));
+              console.log(items);
+              setProduct(items);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+
+    }, [catId]);
 
     return (
         <>
-            <Row className='Item-list-container'>
-                <Col md={12} className='d-flex justify-content-center'>
-                    <ItemList items={product} />
-                </Col>
-            </Row>
+            {
+                loading
+                        ?  <div class="ui active inverted dimmer">
+                            <div class="ui large text loader">Cargando</div>
+                           </div>
+                        : <ItemList product={product}/>
+            }
         </>
     );
 };
